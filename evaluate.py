@@ -125,7 +125,7 @@ image_list = [DATA_PATH+'/frames/'+x+'.jpeg' for x in frames_list]
 
 predict_frame_dict = {}
 
-for index, files in enumerate(image_list[:2]):
+for index, files in enumerate(image_list):
     frame_id = frames_list[index]
     img = scipy.ndimage.imread(files)
     for i in range(0, img.shape[0], s1):
@@ -157,46 +157,42 @@ for index, files in enumerate(image_list[:2]):
                 predict_frame_dict[frame_id]['probability'].append(p)
 
     # print (ant_dict.keys())
-    # for dup in (sorted(list_duplicates(predict_frame_dict[frame_id]['ant_id']))):
-    #     print (dup[0])
-    #     ant_id = str(dup[0])
-    #     coord_list = ant_dict[ant_id]['coordiantes']
-    #     x = [int(v[0]) for v in coord_list]
-    #     y = [int(v[1]) for v in coord_list]
-    #     print (sum(x)/len(x), sum(y)/len(y))
-    #     for v in dup[1]:
-    #         # ant_id = predict_frame_dict[frame_id]['ant_id'][v]
-    #         print (predict_frame_dict[frame_id]['ant_id'][v])
-    #         print (predict_frame_dict[frame_id]['probability'][v])
-    #         print (predict_frame_dict[frame_id]['coordinates'][v])
+    for dup in (sorted(list_duplicates(predict_frame_dict[frame_id]['ant_id']))):
+        print (dup[0])
+        ant_id = str(dup[0])
+        coord_list = ant_dict[ant_id]['coordiantes']
+        x = [int(v[0]) for v in coord_list]
+        y = [int(v[1]) for v in coord_list]
+        print (sum(x)/len(x), sum(y)/len(y))
+        for v in dup[1]:
+            ant_id = predict_frame_dict[frame_id]['ant_id'][v]
+            # print (predict_frame_dict[frame_id]['ant_id'][v])
+            # print (predict_frame_dict[frame_id]['probability'][v])
+            # print (predict_frame_dict[frame_id]['coordinates'][v])
 
-# for j,ant_id in enumerate(predict_frame_dict[frame_id]['ant_id']):
-#     print (ant_id)
-#     ant_id = str(ant_id)
-#     coord_list = ant_dict[ant_id]['coordiantes']
-#     x = [int(v[0]) for v in coord_list]
-#     y = [int(v[1]) for v in coord_list]
-#     max_x = max(x)
-#     max_y = max(y)
-#     if max_x > best_max_x:
-#         best_max_x = max_x
-#     if max_y > best_max_y:
-#         best_max_y = max_y
-    # print (sum(x)/len(x), sum(y)/len(y))
-    # print (predict_frame_dict[frame_id]['ant_id'][j])
-    # print (predict_frame_dict[frame_id]['probability'][j])
-    # print (predict_frame_dict[frame_id]['coordinates'][j])
+for j,ant_id in enumerate(predict_frame_dict[frame_id]['ant_id']):
+    print (ant_id)
+    ant_id = str(ant_id)
+    coord_list = ant_dict[ant_id]['coordiantes']
+    x = [int(v[0]) for v in coord_list]
+    y = [int(v[1]) for v in coord_list]
+    max_x = max(x)
+    max_y = max(y)
+    if max_x > best_max_x:
+        best_max_x = max_x
+    if max_y > best_max_y:
+        best_max_y = max_y
 
 
-# with open('test_prediction.csv', 'wb') as csvfile:
-#     f = csv.writer(csvfile, delimiter=',',
-#                    quotechar='|', quoting=csv.QUOTE_MINIMAL)
-#     for ant_id in ant_id_list:
-#         for frame_id in predict_frame_dict.keys():
-#             if ant_id in predict_frame_dict[frame_id]['ant_id']:
-#                 index = predict_frame_dict[frame_id]['ant_id'].index(ant_id)
-#                 coord = predict_frame_dict[frame_id]['coordinates'][index]
-#                 x, y = coord[0], coord[1]
-#                 f.writerow([ant_id, frame_id, x, y, 1])
-#             else:
-#                 f.writerow([ant_id, frame_id, 0, 0, 0])
+with open('test_prediction.csv', 'wb') as csvfile:
+    f = csv.writer(csvfile, delimiter=',',
+                   quotechar='|', quoting=csv.QUOTE_MINIMAL)
+    for ant_id in ant_id_list:
+        for frame_id in predict_frame_dict.keys():
+            if ant_id in predict_frame_dict[frame_id]['ant_id']:
+                index = predict_frame_dict[frame_id]['ant_id'].index(ant_id)
+                coord = predict_frame_dict[frame_id]['coordinates'][index]
+                x, y = coord[0], coord[1]
+                f.writerow([ant_id, frame_id, x, y, 1])
+            else:
+                f.writerow([ant_id, frame_id, 0, 0, 0])
